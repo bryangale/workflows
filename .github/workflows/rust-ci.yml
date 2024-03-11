@@ -1,0 +1,37 @@
+name: "Rust CI"
+on:
+  workflow_call:
+
+jobs:
+  format:
+    name: cargo fmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: cargo fmt --check
+
+  clippy:
+    name: cargo clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - uses: arduino/setup-protoc@v3
+      - run: sudo apt-get install -y libudev-dev
+      - run: cargo clippy
+  test:
+    name: cargo test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - uses: arduino/setup-protoc@v3
+      - run: sudo apt-get install -y libudev-dev
+      - run: cargo test
